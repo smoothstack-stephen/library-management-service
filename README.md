@@ -1,24 +1,90 @@
 # library-management-service
-### **Currently WIP**
-A library management service application by Team Super SmoothStack-Jin (Stephen, Skyler, Sergio, Juan)
+### Beta version
+:books: A library management service (LMS) application by Team ***Super Smoothstack-Jin*** (Stephen, Skyler, Juan)
+
+## Implementation
+Our LMS application follows the Data Access Object (DAO) design scheme.
+
+```
+App
+> LMSApp.java
+
+DAO
+> AuthorDao.java
+> BookDao.java
+> PublisherDao.java
+
+Model
+> Author.java
+> Book.java
+> Publisher.java
+```
+
+The App class (LMSApp.java) implements the menu interface, program logic, and user input.
+
+The DAO classes implement file processing (read from & save to CSV files) and database methods (add/update/retrieve/remove).
+
+The Model classes hold data fields (e.g. Author name/id), which can be retrieved or modified.
+
+### Methods
+(Example from BookDao.java)
+
+#### **File I/O**
+```java
+// Set is used to ensure there are no duplicates
+public Set<Book> readBooks() throws IOException {
+  BufferedReader buffer = new BufferedReader(new FileReader(fileRelativePath));
+  String line;
+
+  while((line = buffer.readLine()) != null) {
+    String[] values = line.split(";");
+    books.add(new Book(values[0].trim(), values[1].trim(), values[2].trim(), values[3].trim()));
+           // new Book(name, id, author_id, publisher_id)
+  }
+
+  buffer.close();
+  return books;
+}
+
+public void saveToCSV() throws IOException {
+  BufferedWriter buffer = new BufferedWriter(new FileWriter(fileRelativePath));
+
+  books.stream()
+  .forEach(book -> {
+    String line = String.join("; ", book.getName(), book.getId(), book.getAuthId(), book.getPubId());
+    try {
+      buffer.write(line + "\n");
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+  });
+
+  buffer.close();
+}
+```
+
+#### **List iteration**
+```java
+// Uses Java 8 Stream and Lambda expressions
+public void updateBook(String queryId, String newName, String newAuthId, String newPubId) {
+  books.stream()
+  .filter(book -> book.getId().equalsIgnoreCase(queryId))
+  .forEach(book -> {
+    book.setName(newName);
+    book.setAuthId(newAuthId);
+    book.setPubId(newPubId);
+  });
+}
+```
 
 ## Task List
-- [x] Implement model classes with relevant methods (getter/setter, equals, hashCode)
-  - [x] Author
-  - [x] Book
-  - [x] Publisher
-  
-- [x] Implement DAO classes for each model (read from CSV, add/update/retrieve/remove objects)
-  - [x] AuthorDao
-  - [x] BookDao
-  - [x] PublisherDao
-  
-- [x] Implement main application
-  - [x] Command-line menu interface
-  - [x] Menu option handling logic
-  - [x] Save changes to CSV file
+- [x] Implement model classes with relevant methods (print, getter/setter, equals, hashCode, compareTo)
+- [x] Implement DAO classes for each model (read from CSV, add/update/retrieve/remove, save to CSV)
+- [x] Implement main application (command-line interface)
 
 - [ ] Next Steps
-  - [ ] Error handling / input checking (for invalid or duplicate IDs)
+  - [ ] Input sanitizing (remove characters with special meaning; e.g. "//", "\n", and ";")
+  - [ ] Input checking (for invalid or duplicate id values)
+  - [ ] Exception handling (better error messages)
   - [ ] Unit testing
-  - [ ] Improve usability (flexible menu options, display both name and ID in results)
+  - [ ] Improve app flow (return to title page, more forgiving input handling)
