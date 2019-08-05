@@ -14,8 +14,9 @@ A library management service application by Team Super SmoothStack-Jin (Stephen,
   - [x] PublisherDao
   
 - [ ] Implement main application
-  - [ ] Command-line menu interface
-  - [ ] Menu option handling logic
+  - [x] Command-line menu interface
+  - [x] Menu option handling logic
+  - [ ] Write back to CSV file
   
 - [ ] Write unit testing methods
 
