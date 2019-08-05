@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
 import com.st.lms.model.Publisher;
@@ -23,7 +24,11 @@ public class PublisherDao {
 		
 		while((line = buffer.readLine()) != null) {
 			String[] values = line.split(";");
-			publishers.add(new Publisher(values[0].trim(), values[1].trim(), values[2].trim()));
+			String name = values[0].trim();			
+			String id = values[1].trim();
+			String address = values[2].trim();
+			
+			publishers.add(new Publisher(name, id, address));
 		}
 		
 		buffer.close();
@@ -31,6 +36,7 @@ public class PublisherDao {
 	}
 	
 	public void addPublisher(String name, String id, String address) {
+		sanitize(name, id, address);
 		publishers.add(new Publisher(name, id, address));
 	}
 	
@@ -70,4 +76,12 @@ public class PublisherDao {
 		
 		buffer.close();		
 	}
+	
+	// Removes special characters (just ; at the moment)
+	public void sanitize(String ...args) {
+		Set<String> strings = new TreeSet<>(Arrays.asList(args));
+		strings.stream()
+		.forEach(string -> string.replaceAll(";", ""));
+	}
+	
 }

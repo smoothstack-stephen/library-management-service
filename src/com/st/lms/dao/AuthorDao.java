@@ -18,7 +18,10 @@ public class AuthorDao {
 		
 		while((line = buffer.readLine()) != null) {
 			String[] values = line.split(";");
-			authors.add(new Author(values[0].trim(), values[1].trim()));
+			String name = values[0].trim();
+			String id = values[1].trim();
+			
+			authors.add(new Author(name, id));
 		}
 		
 		buffer.close();
@@ -26,6 +29,7 @@ public class AuthorDao {
 	}
 	
 	public void addAuthor(String name, String id) {
+		sanitize(name, id);
 		authors.add(new Author(name, id));
 	}
 	
@@ -62,4 +66,12 @@ public class AuthorDao {
 		
 		buffer.close();
 	}
+	
+	// Removes special characters (just ; at the moment)
+	public void sanitize(String ...args) {
+		Set<String> strings = new TreeSet<>(Arrays.asList(args));
+		strings.stream()
+		.forEach(string -> string.replaceAll(";", ""));
+	}
+	
 }

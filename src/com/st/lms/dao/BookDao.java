@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
 import com.st.lms.model.Book;
@@ -23,7 +24,12 @@ public class BookDao {
 		
 		while((line = buffer.readLine()) != null) {
 			String[] values = line.split(";");
-			books.add(new Book(values[0].trim(), values[1].trim(), values[2].trim(), values[3].trim()));
+			String name = values[0].trim();
+			String id = values[1].trim();
+			String authId = values[2].trim();
+			String pubId = values[3].trim();
+			
+			books.add(new Book(name, id, authId, pubId));
 		}
 		
 		buffer.close();
@@ -31,6 +37,7 @@ public class BookDao {
 	}
 	
 	public void addBook(String name, String id, String authId, String pubId) {
+		sanitize(name, id, authId, pubId);
 		books.add(new Book(name, id, authId, pubId));
 	}
 	
@@ -70,5 +77,12 @@ public class BookDao {
 		});
 		
 		buffer.close();
+	}
+	
+	// Removes special characters (just ; at the moment)
+	public void sanitize(String ...args) {
+		Set<String> strings = new TreeSet<>(Arrays.asList(args));
+		strings.stream()
+		.forEach(string -> string.replaceAll(";", ""));
 	}
 }
