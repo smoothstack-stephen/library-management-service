@@ -97,6 +97,8 @@ public void updateBook(String queryId, String newName, String newAuthId, String 
   - [x] Input checking (currently working for: duplicate Ids)
   - [x] Recursive menu (returns to main title after successful operation)
   - [ ] Exception handling (better error messages)
+  - [ ] Outsource DAO instantiation to a Service class (instead of in main app)
+  - [ ] Relational methods (Author-Book and Publisher-Book; related to better retrieve method)
   - [ ] Unit testing
   - [ ] More forgiving input handling (retry input)
   - [ ] More intuitive book retrieve result (author/publisher name instead of id)
