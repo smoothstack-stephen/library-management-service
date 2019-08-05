@@ -1,6 +1,6 @@
 # library-management-service
 ### :books: Beta version
-A library management service (LMS) application by Team ***Super Smoothstack-Jin*** (Stephen, Skyler, Juan)
+A library management service (LMS) application by ***Team SSJ*** *(Super Smoothstack-Jin)*
 
 ## Implementation
 Our LMS application follows the Data Access Object (DAO) design scheme.
