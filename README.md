@@ -14,11 +14,11 @@ A library management service application by Team Super SmoothStack-Jin (Stephen,
   - [x] PublisherDao
   
 - [ ] Implement main application
-  - [ ] Command-line menu interface
-  - [ ] Menu option handling logic
-  
-- [ ] Write unit testing methods
+  - [x] Command-line menu interface
+  - [x] Menu option handling logic
+  - [ ] Write back to CSV file
 
 - [ ] Next Steps
-  - [ ] Add detailed description of classes and methods in this README
-  - [ ] Add ability to query by name instead of id (with handling of duplicate results)
+  - [ ] Error handling / input checking
+  - [ ] Unit testing
+  - [ ] Improve menu options (more flexibility and ease of use)
