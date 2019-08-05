@@ -1,11 +1,9 @@
 package com.st.lms.dao;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Set;
 import java.util.TreeSet;
-
 import com.st.lms.model.Book;
 
 public class BookDao {
@@ -34,13 +32,13 @@ public class BookDao {
 		books.add(new Book(name, id, authId, pubId));
 	}
 	
-	public void updateBook(String fieldType, String queryId, String newValue) {
+	public void updateBook(String queryId, String newName, String newAuthId, String newPubId) {
 		books.stream()
 		.filter(book -> book.getId().equalsIgnoreCase(queryId))
 		.forEach(book -> {
-			if (fieldType.equalsIgnoreCase("name")) book.setName(newValue);
-			else if (fieldType.equalsIgnoreCase("author")) book.setAuthId(newValue);
-			else book.setPubId(newValue);
+			book.setName(newName);
+			book.setAuthId(newAuthId);
+			book.setPubId(newPubId);
 		});
 	}
 	
