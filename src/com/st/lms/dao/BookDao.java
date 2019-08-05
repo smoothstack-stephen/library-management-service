@@ -1,6 +1,8 @@
 package com.st.lms.dao;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Set;
 import java.util.TreeSet;
@@ -20,8 +22,8 @@ public class BookDao {
 		String line;
 		
 		while((line = buffer.readLine()) != null) {
-			String[] values = line.split(",");
-			books.add(new Book(values[0], values[1], values[2], values[3]));
+			String[] values = line.split(";");
+			books.add(new Book(values[0].trim(), values[1].trim(), values[2].trim(), values[3].trim()));
 		}
 		
 		buffer.close();
@@ -54,4 +56,19 @@ public class BookDao {
 		.forEach(book -> books.remove(book));
 	}
 	
+	public void saveToCSV() throws IOException {
+		BufferedWriter buffer = new BufferedWriter(new FileWriter(fileRelativePath));
+		
+		books.stream()
+		.forEach(book -> {
+			String line = String.join("; ", book.getName(), book.getId(), book.getAuthId(), book.getPubId());
+			try {
+				buffer.write(line + "\n");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		
+		buffer.close();
+	}
 }

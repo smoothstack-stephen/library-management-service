@@ -1,6 +1,6 @@
 package com.st.lms.model;
 
-public class Publisher {
+public class Publisher implements Comparable<Publisher> {
 	private String name, id, address;
 	
 	public Publisher(String name, String id, String address) {
@@ -10,11 +10,10 @@ public class Publisher {
 	}
 	
 	public void printInfo() {
-		System.out.println("==============================================");
-		System.out.println("Publisher Name: " + name);
-		System.out.println("            Id: " + id);
-		System.out.println("       Address: " + address);
-		System.out.println("==============================================");
+		System.out.println();
+		System.out.printf("Publisher Name: %s\n", name);
+		System.out.printf("Publisher Id:   %s\n", id);
+		System.out.printf("Address:        %s\n", address);
 	}
 	
 	public String getName() {
@@ -76,6 +75,11 @@ public class Publisher {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(Publisher o) {
+		return Integer.parseInt(this.getId()) - Integer.parseInt(o.getId());
 	}
 	
 }

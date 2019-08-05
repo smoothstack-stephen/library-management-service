@@ -15,8 +15,7 @@ public class LMSApp {
 	
 	public static void main(String[] args) throws IOException {
 		LMSApp app = new LMSApp();
-		//app.start();
-		app.showTitleMenu();
+		app.start();
 	}
 
 	public void start() throws IOException {
@@ -25,7 +24,7 @@ public class LMSApp {
 		pubDao = new PublisherDao();
 		
 		showTitleMenu();
-		
+		saveToCSV();
 		exitApp();
 	}
 	
@@ -58,6 +57,7 @@ public class LMSApp {
 	
 	public void performTask(int taskType, int objectType) {
 		String name, id, authId, pubId, address;
+		System.out.println();
 		
 		switch (objectType) {
 		case 1: // Author
@@ -147,6 +147,12 @@ public class LMSApp {
 		default:
 			break;
 		}
+	}
+
+	public void saveToCSV() throws IOException {
+		authDao.saveToCSV();
+		bookDao.saveToCSV();
+		pubDao.saveToCSV();
 	}
 	
 	public void exitApp() {

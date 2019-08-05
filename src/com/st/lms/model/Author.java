@@ -1,6 +1,6 @@
 package com.st.lms.model;
 
-public class Author {
+public class Author implements Comparable<Author> {
 	private String name, id;
 	
 	public Author(String name, String id) {
@@ -9,10 +9,9 @@ public class Author {
 	}
 	
 	public void printInfo() {
-		System.out.println("==============================================");
-		System.out.println("Author Name: " + name);
-		System.out.println("         Id: " + id);
-		System.out.println("==============================================");
+		System.out.println();
+		System.out.printf("Author Name: %s\n", name);
+		System.out.printf("Author Id:   %s\n", id);
 	}	
 	
 	public String getName() {
@@ -60,6 +59,11 @@ public class Author {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	@Override
+	public int compareTo(Author o) {
+		return Integer.parseInt(this.getId()) - Integer.parseInt(o.getId());
 	}
 	
 	

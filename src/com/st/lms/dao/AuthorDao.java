@@ -17,8 +17,8 @@ public class AuthorDao {
 		String line;
 		
 		while((line = buffer.readLine()) != null) {
-			String[] values = line.split(",");
-			authors.add(new Author(values[0], values[1]));
+			String[] values = line.split(";");
+			authors.add(new Author(values[0].trim(), values[1].trim()));
 		}
 		
 		buffer.close();
@@ -45,5 +45,21 @@ public class AuthorDao {
 		authors.stream()
 		.filter(author -> author.getId().equalsIgnoreCase(queryId))
 		.forEach(author -> authors.remove(author));
+	}
+	
+	public void saveToCSV() throws IOException {
+		BufferedWriter buffer = new BufferedWriter(new FileWriter(fileRelativePath));
+		
+		authors.stream()
+		.forEach(author -> {
+			String line = String.join("; ", author.getName(), author.getId());
+			try {
+				buffer.write(line + "\n");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		
+		buffer.close();
 	}
 }

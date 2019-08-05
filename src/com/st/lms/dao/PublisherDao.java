@@ -1,6 +1,8 @@
 package com.st.lms.dao;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Set;
 import java.util.TreeSet;
@@ -20,8 +22,8 @@ public class PublisherDao {
 		String line;
 		
 		while((line = buffer.readLine()) != null) {
-			String[] values = line.split(",");
-			publishers.add(new Publisher(values[0], values[1], values[2]));
+			String[] values = line.split(";");
+			publishers.add(new Publisher(values[0].trim(), values[1].trim(), values[2].trim()));
 		}
 		
 		buffer.close();
@@ -52,5 +54,20 @@ public class PublisherDao {
 		.filter(publisher -> publisher.getId().equalsIgnoreCase(queryId))
 		.forEach(publisher -> publishers.remove(publisher));
 	}
-	
+
+	public void saveToCSV() throws IOException {
+		BufferedWriter buffer = new BufferedWriter(new FileWriter(fileRelativePath));
+		
+		publishers.stream()
+		.forEach(publisher -> {
+			String line = String.join("; ", publisher.getName(), publisher.getId(), publisher.getAddress());
+			try {
+				buffer.write(line + "\n");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		});
+		
+		buffer.close();		
+	}
 }
