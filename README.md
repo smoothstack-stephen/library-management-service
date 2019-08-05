@@ -93,8 +93,8 @@ public void updateBook(String queryId, String newName, String newAuthId, String 
 - [x] Implement main application (command-line interface)
 
 - [ ] Next Steps
-  - [x] Input sanitizing (remove characters with special meaning; e.g. comment blocks, newline, and ";")
-  - [ ] Input checking (for invalid or duplicate id values)
+  - [x] Input sanitizing (currently working for: ";")
+  - [x] Input checking (currently working for: duplicate Ids)
   - [ ] Exception handling (better error messages)
   - [ ] Unit testing
   - [ ] Improve app flow (return to title page, more forgiving input handling)
