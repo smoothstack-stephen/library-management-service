@@ -34,7 +34,7 @@ The Model classes hold data fields (e.g. Author name/id), which can be retrieved
 
 #### **File I/O**
 ```java
-// Set is used to ensure there are no duplicates
+// Set is used to prevent duplicates
 public Set<Book> readBooks() throws IOException {
   BufferedReader buffer = new BufferedReader(new FileReader(fileRelativePath));
   String line;
