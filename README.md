@@ -13,12 +13,12 @@ A library management service application by Team Super SmoothStack-Jin (Stephen,
   - [x] BookDao
   - [x] PublisherDao
   
-- [ ] Implement main application
+- [x] Implement main application
   - [x] Command-line menu interface
   - [x] Menu option handling logic
-  - [ ] Write back to CSV file
+  - [x] Save changes to CSV file
 
 - [ ] Next Steps
-  - [ ] Error handling / input checking
+  - [ ] Error handling / input checking (for invalid or duplicate IDs)
   - [ ] Unit testing
-  - [ ] Improve menu options (more flexibility and ease of use)
+  - [ ] Improve usability (flexible menu options, display both name and ID in results)
