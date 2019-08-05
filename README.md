@@ -53,6 +53,7 @@ public Set<Book> readBooks() throws IOException {
   return books;
 }
 
+// Uses Java 8 Stream and lambda expressions
 public void saveToCSV() throws IOException {
   BufferedWriter buffer = new BufferedWriter(new FileWriter(fileRelativePath));
 
@@ -72,7 +73,7 @@ public void saveToCSV() throws IOException {
 
 #### **List iteration**
 ```java
-// Uses Java 8 Stream and Lambda expressions
+// Uses Java 8 Stream and lambda expressions
 public void updateBook(String queryId, String newName, String newAuthId, String newPubId) {
   books.stream()
   .filter(book -> book.getId().equalsIgnoreCase(queryId))
