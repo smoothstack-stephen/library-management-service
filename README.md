@@ -34,6 +34,8 @@ The Model classes hold data fields (e.g. Author name/id), which can be retrieved
 
 #### **File I/O**
 ```java
+private Set<Book> books = new TreeSet<>(); // each DAO object has own Set (authors, books, publishers)
+
 // Set is used to prevent duplicates
 public Set<Book> readBooks() throws IOException {
   BufferedReader buffer = new BufferedReader(new FileReader(fileRelativePath));
