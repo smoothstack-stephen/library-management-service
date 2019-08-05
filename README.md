@@ -1,6 +1,9 @@
-# library-management-service
-### :books: Beta version
+# :books: library-management-service
+:man_office_worker: **Team members:** Stephen, Skyler, Juan
+
 A library management service (LMS) application by ***Team SSJ*** *(Super Smoothstack-Jin)*
+
+
 
 ## Implementation
 Our LMS application follows the Data Access Object (DAO) design scheme.
@@ -81,13 +84,13 @@ public void updateBook(String queryId, String newName, String newAuthId, String 
 }
 ```
 
-## Task List
+## :memo: Task List
 - [x] Implement model classes with relevant methods (print, getter/setter, equals, hashCode, compareTo)
 - [x] Implement DAO classes for each model (read from CSV, add/update/retrieve/remove, save to CSV)
 - [x] Implement main application (command-line interface)
 
 - [ ] Next Steps
-  - [ ] Input sanitizing (remove characters with special meaning; e.g. "//", "\n", and ";")
+  - [ ] Input sanitizing (remove characters with special meaning; e.g. comment blocks, newline, and ";")
   - [ ] Input checking (for invalid or duplicate id values)
   - [ ] Exception handling (better error messages)
   - [ ] Unit testing
