@@ -30,7 +30,8 @@ public class AuthorDao {
 	
 	public void addAuthor(String name, String id) {
 		sanitize(name, id);
-		authors.add(new Author(name, id));
+		if (!isDuplicateId(id)) authors.add(new Author(name, id));
+		else System.out.println("Author Id already exists, cannot add author with duplicate Id.");
 	}
 	
 	public void updateAuthor(String queryId, String newName) {
@@ -72,6 +73,11 @@ public class AuthorDao {
 		Set<String> strings = new TreeSet<>(Arrays.asList(args));
 		strings.stream()
 		.forEach(string -> string.replaceAll(";", ""));
+	}
+	
+	// Checks if there already exists an Author with some Id value
+	public boolean isDuplicateId(String idToCheck) {
+		return authors.stream().anyMatch(author -> author.getId().equalsIgnoreCase(idToCheck));
 	}
 	
 }

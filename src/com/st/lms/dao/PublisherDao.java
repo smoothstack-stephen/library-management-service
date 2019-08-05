@@ -37,7 +37,8 @@ public class PublisherDao {
 	
 	public void addPublisher(String name, String id, String address) {
 		sanitize(name, id, address);
-		publishers.add(new Publisher(name, id, address));
+		if (!isDuplicateId(id)) publishers.add(new Publisher(name, id, address));
+		else System.out.println("Publisher Id already exists, cannot add publisher with duplicate Id.");
 	}
 	
 	public void updatePublisher(String queryId, String newName, String newAddress) {
@@ -82,6 +83,11 @@ public class PublisherDao {
 		Set<String> strings = new TreeSet<>(Arrays.asList(args));
 		strings.stream()
 		.forEach(string -> string.replaceAll(";", ""));
+	}
+	
+	// Checks if there already exists a Publisher with some Id value
+	public boolean isDuplicateId(String idToCheck) {
+		return publishers.stream().anyMatch(publisher -> publisher.getId().equalsIgnoreCase(idToCheck));
 	}
 	
 }

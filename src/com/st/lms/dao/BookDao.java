@@ -38,7 +38,8 @@ public class BookDao {
 	
 	public void addBook(String name, String id, String authId, String pubId) {
 		sanitize(name, id, authId, pubId);
-		books.add(new Book(name, id, authId, pubId));
+		if (!isDuplicateId(id)) books.add(new Book(name, id, authId, pubId));
+		else System.out.println("Book Id already exists, cannot add book with duplicate Id.");
 	}
 	
 	public void updateBook(String queryId, String newName, String newAuthId, String newPubId) {
@@ -85,4 +86,10 @@ public class BookDao {
 		strings.stream()
 		.forEach(string -> string.replaceAll(";", ""));
 	}
+	
+	// Checks if there already exists a Book with some Id value
+	public boolean isDuplicateId(String idToCheck) {
+		return books.stream().anyMatch(book -> book.getId().equalsIgnoreCase(idToCheck));
+	}
+	
 }
