@@ -1,12 +1,7 @@
 package com.st.lms.dao;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Set;
-import java.util.TreeSet;
+import java.io.*;
+import java.util.*;
+import java.util.stream.*;
 import com.st.lms.model.Publisher;
 
 public class PublisherDao {
@@ -57,9 +52,9 @@ public class PublisherDao {
 	}
 	
 	public void removePublisher(String queryId) {
-		publishers.stream()
-		.filter(publisher -> publisher.getId().equalsIgnoreCase(queryId))
-		.forEach(publisher -> publishers.remove(publisher));
+		publishers = publishers.stream()
+					.filter(publisher -> !publisher.getId().equalsIgnoreCase(queryId))
+					.collect(Collectors.toSet());
 	}
 
 	public void saveToCSV() throws IOException {

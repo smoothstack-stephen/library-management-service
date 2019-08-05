@@ -1,6 +1,7 @@
 package com.st.lms.dao;
 import com.st.lms.model.Author;
 import java.util.*;
+import java.util.stream.*;
 import java.io.*;
 
 public class AuthorDao {
@@ -47,9 +48,9 @@ public class AuthorDao {
 	}
 	
 	public void removeAuthor(String queryId) {
-		authors.stream()
-		.filter(author -> author.getId().equalsIgnoreCase(queryId))
-		.forEach(author -> authors.remove(author));
+		authors = authors.stream()
+				.filter(author -> !author.getId().equalsIgnoreCase(queryId))
+				.collect(Collectors.toSet());
 	}
 	
 	public void saveToCSV() throws IOException {

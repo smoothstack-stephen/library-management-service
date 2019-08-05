@@ -28,8 +28,8 @@ public class LMSApp {
 		exitApp();
 	}
 	
-	public void showTitleMenu() {
-		System.out.println("============== Library Management Service, by SSSJ ==============\n");
+	public void showTitleMenu() throws IOException {
+		System.out.println("=================================================================\n");
 		System.out.println("Select from the following options (type the option number):\n");
 		System.out.println("[1] Add new...");
 		System.out.println("[2] Update existing...");
@@ -53,9 +53,10 @@ public class LMSApp {
 		
 		performTask(operationChoice, objectChoice);
 		
+		showTitleMenu();
 	}
 	
-	public void performTask(int taskType, int objectType) {
+	public void performTask(int taskType, int objectType) throws IOException {
 		String name, id, authId, pubId, address;
 		System.out.println();
 		
@@ -147,6 +148,9 @@ public class LMSApp {
 		default:
 			break;
 		}
+		
+		System.out.println();
+		saveToCSV();
 	}
 
 	public void saveToCSV() throws IOException {
