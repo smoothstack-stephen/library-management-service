@@ -20,5 +20,5 @@ A library management service application by Team Super SmoothStack-Jin (Stephen,
 - [ ] Write unit testing methods
 
 - [ ] Next Steps
-  - [ ] Add ability to query by name instead of id (for user convenience)
-    - [ ] Add handling of duplicate names (make user choose from a list)
+  - [ ] Add detailed description of classes and methods in this README
+  - [ ] Add ability to query by name instead of id (with handling of duplicate results)
