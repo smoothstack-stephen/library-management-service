@@ -159,6 +159,7 @@ public class LMSApp {
 		System.out.println("=================================================================\n");
 		System.out.println("Thank you for using our Library Management Service!");
 		System.out.println("We hope you have a great day.");
+		scan.close();
 		System.exit(0);		
 	}
 }
