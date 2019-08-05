@@ -95,6 +95,8 @@ public void updateBook(String queryId, String newName, String newAuthId, String 
 - [ ] Next Steps
   - [x] Input sanitizing (currently working for: ";")
   - [x] Input checking (currently working for: duplicate Ids)
+  - [x] Recursive menu (returns to main title after successful operation)
   - [ ] Exception handling (better error messages)
   - [ ] Unit testing
-  - [ ] Improve app flow (return to title page, more forgiving input handling)
+  - [ ] More forgiving input handling (retry input)
+  - [ ] More intuitive book retrieve result (author/publisher name instead of id)
