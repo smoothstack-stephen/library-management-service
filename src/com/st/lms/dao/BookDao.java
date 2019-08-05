@@ -13,13 +13,17 @@ public class BookDao {
 	private String fileRelativePath = System.getProperty("user.dir") + "\\src\\books.csv";
 	private Set<Book> books = new TreeSet<>();
 
+	public BookDao() throws IOException {
+		readBooks();
+	}
+	
 	public Set<Book> readBooks() throws IOException {
 		BufferedReader buffer = new BufferedReader(new FileReader(fileRelativePath));
 		String line;
 		
 		while((line = buffer.readLine()) != null) {
 			String[] values = line.split(",");
-			books.add(new Book(values[0], values[1]));
+			books.add(new Book(values[0], values[1], values[2], values[3]));
 		}
 		
 		buffer.close();
@@ -30,21 +34,25 @@ public class BookDao {
 		books.add(new Book(name, id, authId, pubId));
 	}
 	
-	public void updateBook(String currentName, String newName) {
+	public void updateBook(String fieldType, String queryId, String newValue) {
 		books.stream()
-		.filter(book -> book.getName().equalsIgnoreCase(currentName))
-		.forEach(book -> book.setName(newName));
+		.filter(book -> book.getId().equalsIgnoreCase(queryId))
+		.forEach(book -> {
+			if (fieldType.equalsIgnoreCase("name")) book.setName(newValue);
+			else if (fieldType.equalsIgnoreCase("author")) book.setAuthId(newValue);
+			else book.setPubId(newValue);
+		});
 	}
 	
-	public void retrieveBook(String searchName) {
+	public void retrieveBook(String queryId) {
 		books.stream()
-		.filter(book -> book.getName().equalsIgnoreCase(searchName))
+		.filter(book -> book.getId().equalsIgnoreCase(queryId))
 		.forEach(book -> book.printInfo());
 	}
 	
-	public void removeBook(String searchName) {
+	public void removeBook(String queryId) {
 		books.stream()
-		.filter(book -> book.getName().equalsIgnoreCase(searchName))
+		.filter(book -> book.getId().equalsIgnoreCase(queryId))
 		.forEach(book -> books.remove(book));
 	}
 	

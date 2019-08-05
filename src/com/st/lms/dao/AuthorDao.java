@@ -7,6 +7,10 @@ public class AuthorDao {
 	
 	private String fileRelativePath = System.getProperty("user.dir") + "\\src\\authors.csv";
 	private Set<Author> authors = new TreeSet<>();
+	
+	public AuthorDao() throws IOException {
+		readAuthors();
+	}
 
 	public Set<Author> readAuthors() throws IOException {
 		BufferedReader buffer = new BufferedReader(new FileReader(fileRelativePath));
@@ -25,21 +29,21 @@ public class AuthorDao {
 		authors.add(new Author(name, id));
 	}
 	
-	public void updateAuthor(String currentName, String newName) {
+	public void updateAuthor(String queryId, String newName) {
 		authors.stream()
-		.filter(author -> author.getName().equalsIgnoreCase(currentName))
+		.filter(author -> author.getId().equalsIgnoreCase(queryId))
 		.forEach(author -> author.setName(newName));
 	}
 	
-	public void retrieveAuthor(String searchName) {
+	public void retrieveAuthor(String queryId) {
 		authors.stream()
-		.filter(author -> author.getName().equalsIgnoreCase(searchName))
+		.filter(author -> author.getId().equalsIgnoreCase(queryId))
 		.forEach(author -> author.printInfo());
 	}
 	
-	public void removeAuthor(String searchName) {
+	public void removeAuthor(String queryId) {
 		authors.stream()
-		.filter(author -> author.getName().equalsIgnoreCase(searchName))
+		.filter(author -> author.getId().equalsIgnoreCase(queryId))
 		.forEach(author -> authors.remove(author));
 	}
 }

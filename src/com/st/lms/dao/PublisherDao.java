@@ -13,6 +13,10 @@ public class PublisherDao {
 	private String fileRelativePath = System.getProperty("user.dir") + "\\src\\publishers.csv";
 	private Set<Publisher> publishers = new TreeSet<>();
 
+	
+	public PublisherDao() throws IOException {
+		readPublishers();
+	}
 	public Set<Publisher> readPublishers() throws IOException {
 		BufferedReader buffer = new BufferedReader(new FileReader(fileRelativePath));
 		String line;
@@ -30,21 +34,24 @@ public class PublisherDao {
 		publishers.add(new Publisher(name, id, address));
 	}
 	
-	public void updatePublisher(String currentName, String newName) {
+	public void updatePublisher(String fieldType, String queryId, String newValue) {
 		publishers.stream()
-		.filter(publisher -> publisher.getName().equalsIgnoreCase(currentName))
-		.forEach(publisher -> publisher.setName(newName));
+		.filter(publisher -> publisher.getId().equalsIgnoreCase(queryId))
+		.forEach(publisher -> {
+			if (fieldType.equalsIgnoreCase("name")) publisher.setName(newValue);
+			else publisher.setAddress(newValue);
+		});
 	}
 	
-	public void retrievePublisher(String searchName) {
+	public void retrievePublisher(String queryId) {
 		publishers.stream()
-		.filter(publisher -> publisher.getName().equalsIgnoreCase(searchName))
+		.filter(publisher -> publisher.getId().equalsIgnoreCase(queryId))
 		.forEach(publisher -> publisher.printInfo());
 	}
 	
-	public void removePublisher(String searchName) {
+	public void removePublisher(String queryId) {
 		publishers.stream()
-		.filter(publisher -> publisher.getName().equalsIgnoreCase(searchName))
+		.filter(publisher -> publisher.getId().equalsIgnoreCase(queryId))
 		.forEach(publisher -> publishers.remove(publisher));
 	}
 	
