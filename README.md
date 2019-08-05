@@ -1,6 +1,9 @@
-# library-management-service
-### Beta version
-:books: A library management service (LMS) application by Team ***Super Smoothstack-Jin*** (Stephen, Skyler, Juan)
+# :books: library-management-service
+:man_office_worker: **Team members:** Stephen, Skyler, Juan
+
+A library management service (LMS) application by ***Team SSJ*** *(Super Smoothstack-Jin)*
+
+
 
 ## Implementation
 Our LMS application follows the Data Access Object (DAO) design scheme.
@@ -22,30 +25,37 @@ Model
 
 The App class (LMSApp.java) implements the menu interface, program logic, and user input.
 
-The DAO classes implement file processing (read from & save to CSV files) and database methods (add/update/retrieve/remove).
+The DAO classes provide file processing (CSV files) and database methods (add/update/retrieve/remove) to the App class.
 
-The Model classes hold data fields (e.g. Author name/id), which can be retrieved or modified.
+The Model classes hold data fields (e.g. Author name/id), which can be retrieved or modified by DAO objects.
 
 ### Methods
 (Example from BookDao.java)
 
 #### **File I/O**
 ```java
-// Set is used to ensure there are no duplicates
+private Set<Book> books = new TreeSet<>(); // each DAO object has own Set (authors, books, publishers)
+
+// Set is used to prevent duplicates
 public Set<Book> readBooks() throws IOException {
   BufferedReader buffer = new BufferedReader(new FileReader(fileRelativePath));
   String line;
 
   while((line = buffer.readLine()) != null) {
     String[] values = line.split(";");
-    books.add(new Book(values[0].trim(), values[1].trim(), values[2].trim(), values[3].trim()));
-           // new Book(name, id, author_id, publisher_id)
+    String name = values[0].trim();
+    String id = values[1].trim();
+    String authId = values[2].trim();
+    String pubId = values[3].trim();
+
+    books.add(new Book(name, id, authId, pubId));
   }
 
   buffer.close();
   return books;
 }
 
+// Uses Java 8 Stream and lambda expressions
 public void saveToCSV() throws IOException {
   BufferedWriter buffer = new BufferedWriter(new FileWriter(fileRelativePath));
 
@@ -65,7 +75,7 @@ public void saveToCSV() throws IOException {
 
 #### **List iteration**
 ```java
-// Uses Java 8 Stream and Lambda expressions
+// Uses Java 8 Stream and lambda expressions
 public void updateBook(String queryId, String newName, String newAuthId, String newPubId) {
   books.stream()
   .filter(book -> book.getId().equalsIgnoreCase(queryId))
@@ -77,13 +87,13 @@ public void updateBook(String queryId, String newName, String newAuthId, String 
 }
 ```
 
-## Task List
+## :memo: Task List
 - [x] Implement model classes with relevant methods (print, getter/setter, equals, hashCode, compareTo)
 - [x] Implement DAO classes for each model (read from CSV, add/update/retrieve/remove, save to CSV)
 - [x] Implement main application (command-line interface)
 
 - [ ] Next Steps
-  - [ ] Input sanitizing (remove characters with special meaning; e.g. "//", "\n", and ";")
+  - [ ] Input sanitizing (remove characters with special meaning; e.g. comment blocks, newline, and ";")
   - [ ] Input checking (for invalid or duplicate id values)
   - [ ] Exception handling (better error messages)
   - [ ] Unit testing
