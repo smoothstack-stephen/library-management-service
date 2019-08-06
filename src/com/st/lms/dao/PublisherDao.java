@@ -10,24 +10,43 @@ public class PublisherDao {
 	private Set<Publisher> publishers = new TreeSet<>();
 
 	
-	public PublisherDao() throws IOException {
+	public PublisherDao() {
 		readPublishers();
 	}
-	public Set<Publisher> readPublishers() throws IOException {
-		BufferedReader buffer = new BufferedReader(new FileReader(fileRelativePath));
-		String line;
-		
-		while((line = buffer.readLine()) != null) {
-			String[] values = line.split(";");
-			String name = values[0].trim();			
-			String id = values[1].trim();
-			String address = values[2].trim();
+	
+	public void readPublishers() {
+		try (BufferedReader buffer = new BufferedReader(new FileReader(fileRelativePath))) {
+			String line;
 			
-			publishers.add(new Publisher(name, id, address));
+			while((line = buffer.readLine()) != null) {
+				String[] values = line.split(";");
+				String name = values[0].trim();			
+				String id = values[1].trim();
+				String address = values[2].trim();
+				
+				publishers.add(new Publisher(name, id, address));
+			}
+			
+			buffer.close();
+		} catch (IOException e) {
+			System.out.println("*** ERROR: Failed to load Publishers.csv ***");
+			System.out.println(e.getMessage());
+			System.exit(0);
 		}
-		
-		buffer.close();
-		return publishers;
+	}
+
+	public String getPublisherName(String id) {
+		return publishers.stream()
+				.filter(publisher -> publisher.getId().equalsIgnoreCase(id))
+				.collect(Collectors.toList())
+				.get(0)
+				.getName();
+	}
+
+	public List<String> returnIDList() {
+		return publishers.stream()
+				.map(publisher -> publisher.getId())
+				.collect(Collectors.toList());
 	}
 	
 	public void addPublisher(String name, String id, String address) {
@@ -37,40 +56,55 @@ public class PublisherDao {
 	}
 	
 	public void updatePublisher(String queryId, String newName, String newAddress) {
-		publishers.stream()
-		.filter(publisher -> publisher.getId().equalsIgnoreCase(queryId))
-		.forEach(publisher -> {
-			publisher.setName(newName);
-			publisher.setAddress(newAddress);
-		});
+		if (isDuplicateId(queryId))
+			publishers.stream()
+			.filter(publisher -> publisher.getId().equalsIgnoreCase(queryId))
+			.forEach(publisher -> {
+				if(!newName.equals("")) publisher.setName(newName);
+				if(!newAddress.equals("")) publisher.setAddress(newAddress);
+			});
+		else
+			System.out.printf("\nPublisher not found.\n", queryId);
 	}
 	
 	public void retrievePublisher(String queryId) {
-		publishers.stream()
-		.filter(publisher -> publisher.getId().equalsIgnoreCase(queryId))
-		.forEach(publisher -> publisher.printInfo());
+		if (isDuplicateId(queryId))
+			publishers.stream()
+			.filter(publisher -> publisher.getId().equalsIgnoreCase(queryId))
+			.forEach(publisher -> publisher.printInfo());
+		else
+			System.out.printf("\nPublisher not found.\n", queryId);
 	}
 	
 	public void removePublisher(String queryId) {
-		publishers = publishers.stream()
-					.filter(publisher -> !publisher.getId().equalsIgnoreCase(queryId))
-					.collect(Collectors.toSet());
+		if (isDuplicateId(queryId))
+			publishers = publishers.stream()
+						.filter(publisher -> !publisher.getId().equalsIgnoreCase(queryId))
+						.collect(Collectors.toSet());
+		else
+			System.out.printf("\nPublisher not found.\n", queryId);
 	}
 
-	public void saveToCSV() throws IOException {
-		BufferedWriter buffer = new BufferedWriter(new FileWriter(fileRelativePath));
-		
-		publishers.stream()
-		.forEach(publisher -> {
-			String line = String.join("; ", publisher.getName(), publisher.getId(), publisher.getAddress());
-			try {
-				buffer.write(line + "\n");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
-		
-		buffer.close();		
+	public void saveToCSV() {
+		try (BufferedWriter buffer = new BufferedWriter(new FileWriter(fileRelativePath))) {
+			publishers.stream()
+			.forEach(publisher -> {
+				String line = String.join("; ", publisher.getName(), publisher.getId(), publisher.getAddress());
+				try {
+					buffer.write(line + "\n");
+				} catch (IOException e) {
+					System.out.println("*** ERROR: Failed to save to Publishers.csv ***");
+					System.out.println(e.getMessage());
+					System.exit(0);
+				}
+			});
+			
+			buffer.close();
+		} catch (IOException e) {
+			System.out.println("*** ERROR: Failed to load Publishers.csv ***");
+			System.out.println(e.getMessage());
+			System.exit(0);
+		}
 	}
 	
 	// Removes special characters (just ; at the moment)

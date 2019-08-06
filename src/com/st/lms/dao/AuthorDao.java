@@ -9,24 +9,42 @@ public class AuthorDao {
 	private String fileRelativePath = System.getProperty("user.dir") + "\\src\\authors.csv";
 	private Set<Author> authors = new TreeSet<>();
 	
-	public AuthorDao() throws IOException {
+	public AuthorDao() {
 		readAuthors();
 	}
 
-	public Set<Author> readAuthors() throws IOException {
-		BufferedReader buffer = new BufferedReader(new FileReader(fileRelativePath));
-		String line;
-		
-		while((line = buffer.readLine()) != null) {
-			String[] values = line.split(";");
-			String name = values[0].trim();
-			String id = values[1].trim();
+	public void readAuthors() {
+		try (BufferedReader buffer = new BufferedReader(new FileReader(fileRelativePath))) {
+			String line;
 			
-			authors.add(new Author(name, id));
+			while((line = buffer.readLine()) != null) {
+				String[] values = line.split(";");
+				String name = values[0].trim();
+				String id = values[1].trim();
+				
+				authors.add(new Author(name, id));
+			}
+			
+			buffer.close();
+		} catch (IOException e) {
+			System.out.println("*** ERROR: Failed to load Authors.csv ***");
+			System.out.println(e.getMessage());
+			System.exit(0);
 		}
-		
-		buffer.close();
-		return authors;
+	}
+	
+	public String getAuthorName(String id) {
+		return authors.stream()
+				.filter(author -> author.getId().equalsIgnoreCase(id))
+				.collect(Collectors.toList())
+				.get(0)
+				.getName();
+	}
+	
+	public List<String> returnIDList() {
+		return authors.stream()
+				.map(author -> author.getId())
+				.collect(Collectors.toList());
 	}
 	
 	public void addAuthor(String name, String id) {
@@ -36,37 +54,54 @@ public class AuthorDao {
 	}
 	
 	public void updateAuthor(String queryId, String newName) {
-		authors.stream()
-		.filter(author -> author.getId().equalsIgnoreCase(queryId))
-		.forEach(author -> author.setName(newName));
+		if (isDuplicateId(queryId))
+			authors.stream()
+			.filter(author -> author.getId().equalsIgnoreCase(queryId))
+			.forEach(author -> {
+				if(!newName.equals("")) author.setName(newName);
+			});
+		else
+			System.out.printf("\nAuthor not found.\n", queryId);
 	}
 	
 	public void retrieveAuthor(String queryId) {
-		authors.stream()
-		.filter(author -> author.getId().equalsIgnoreCase(queryId))
-		.forEach(author -> author.printInfo());
+		if (isDuplicateId(queryId))
+			authors.stream()
+			.filter(author -> author.getId().equalsIgnoreCase(queryId))
+			.forEach(author -> author.printInfo());
+		else
+			System.out.printf("\nAuthor not found.\n", queryId);
 	}
 	
 	public void removeAuthor(String queryId) {
-		authors = authors.stream()
-				.filter(author -> !author.getId().equalsIgnoreCase(queryId))
-				.collect(Collectors.toSet());
+		if (isDuplicateId(queryId))
+			authors = authors.stream()
+					.filter(author -> !author.getId().equalsIgnoreCase(queryId))
+					.collect(Collectors.toSet());
+		else
+			System.out.printf("\nAuthor not found.\n", queryId);
 	}
 	
-	public void saveToCSV() throws IOException {
-		BufferedWriter buffer = new BufferedWriter(new FileWriter(fileRelativePath));
-		
-		authors.stream()
-		.forEach(author -> {
-			String line = String.join("; ", author.getName(), author.getId());
-			try {
-				buffer.write(line + "\n");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
-		
-		buffer.close();
+	public void saveToCSV() {
+		try (BufferedWriter buffer = new BufferedWriter(new FileWriter(fileRelativePath))) {	
+			authors.stream()
+			.forEach(author -> {
+				String line = String.join("; ", author.getName(), author.getId());
+				try {
+					buffer.write(line + "\n");
+				} catch (IOException e) {
+					System.out.println("*** ERROR: Failed to save to Authors.csv ***");
+					System.out.println(e.getMessage());
+					System.exit(0);
+				}
+			});
+			
+			buffer.close();
+		} catch (IOException e) {
+			System.out.println("*** ERROR: Failed to load Authors.csv ***");
+			System.out.println(e.getMessage());
+			System.exit(0);
+		}
 	}
 	
 	// Removes special characters (just ; at the moment)
