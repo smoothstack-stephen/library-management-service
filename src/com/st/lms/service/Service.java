@@ -124,15 +124,20 @@ public class Service {
 	}
 	
 	public void betterBookInfo(String id) {
-		Book book = bookDao.getBookById(id);
-		String authName = authDao.getAuthorName(book.getAuthId());
-		String pubName = pubDao.getPublisherName(book.getPubId());
-		
-		System.out.println();
-		System.out.printf("Book Name: %s\n", book.getName());
-		System.out.printf("Book Id:   %s\n", id);
-		System.out.printf("Author:    %s (id: %s)\n", authName, book.getAuthId());
-		System.out.printf("Publisher: %s (id: %s)\n", pubName, book.getPubId());
+		try {
+			Book book = bookDao.getBookById(id);
+			String authName = authDao.getAuthorName(book.getAuthId());
+			String pubName = pubDao.getPublisherName(book.getPubId());
+			
+			System.out.println();
+			System.out.printf("Book Name: %s\n", book.getName());
+			System.out.printf("Book Id:   %s\n", id);
+			System.out.printf("Author:    %s (id: %s)\n", authName, book.getAuthId());
+			System.out.printf("Publisher: %s (id: %s)\n", pubName, book.getPubId());
+			
+		} catch (NullPointerException e) {
+			System.out.println("\nBook not found.");
+		}
 	}
 	
 	// When an author or publisher is removed, remove all books under that author & publisher
