@@ -17,6 +17,9 @@ DAO
 > BookDao.java
 > PublisherDao.java
 
+Service
+> Service.java
+
 Model
 > Author.java
 > Book.java
@@ -27,78 +30,38 @@ The App class (LMSApp.java) implements the menu interface, program logic, and us
 
 The DAO classes provide file processing (CSV files) and database methods (add/update/retrieve/remove) to the App class.
 
-The Model classes hold data fields (e.g. Author name/id), which can be retrieved or modified by DAO objects.
+The Service class acts as a bridge between DAOs, providing relational methods (Author-Book and Publisher-Book).
 
-### Methods
-(Example from BookDao.java)
+The Model classes hold data fields (e.g. Author name/id), which can be retrieved or modified by DAOs.
 
-#### **File I/O**
-```java
-private Set<Book> books = new TreeSet<>(); // each DAO object has own Set (authors, books, publishers)
+### Implementation Notes
 
-// Set is used to prevent duplicates
-public Set<Book> readBooks() throws IOException {
-  BufferedReader buffer = new BufferedReader(new FileReader(fileRelativePath));
-  String line;
-
-  while((line = buffer.readLine()) != null) {
-    String[] values = line.split(";");
-    String name = values[0].trim();
-    String id = values[1].trim();
-    String authId = values[2].trim();
-    String pubId = values[3].trim();
-
-    books.add(new Book(name, id, authId, pubId));
-  }
-
-  buffer.close();
-  return books;
-}
-
-// Uses Java 8 Stream and lambda expressions
-public void saveToCSV() throws IOException {
-  BufferedWriter buffer = new BufferedWriter(new FileWriter(fileRelativePath));
-
-  books.stream()
-  .forEach(book -> {
-    String line = String.join("; ", book.getName(), book.getId(), book.getAuthId(), book.getPubId());
-    try {
-      buffer.write(line + "\n");
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  });
-
-  buffer.close();
-}
-```
-
-#### **List iteration**
-```java
-// Uses Java 8 Stream and lambda expressions
-public void updateBook(String queryId, String newName, String newAuthId, String newPubId) {
-  books.stream()
-  .filter(book -> book.getId().equalsIgnoreCase(queryId))
-  .forEach(book -> {
-    book.setName(newName);
-    book.setAuthId(newAuthId);
-    book.setPubId(newPubId);
-  });
-}
-```
+1. Book class fields (name, id, authId, pubId)
+    * I chose to not use Author and Publisher objects as fields because that would complicate instantiation for Book objects.
+    * It would either require relational methods within the Book class (to pass a valid Author/Publisher object), or delegation of the addBook() method to the Service class (encapsulation problem).
+    * Instead, I encapsulated all relational methods within the Service class.
+    
+2. Service.betterBookInfo() vs Book.printInfo()
+    * This split naturally follows the design choice that I explained above.
+    * betterBookInfo(): printing an Author/Publisher's name from a Book object is a relational method, so it is implemented in the Service class.
+    * printBookInfo(): this is a more primitive print method that only shows the raw Author/Publisher Id.
+    
+3. Service.updateBookList()
+    * This method is called *after* an operation has completed (add/update/retrieve/remove).
+    * In the event of an Author/Publisher removal, it:
+         - Finds the corresponding Id value (from a list of Books) that no longer exists (in a list of Authors/Publishers)
+         - Finds the book(s) that link(s) to this now-deleted Author/Publisher (by its Id value), and delete the book(s).
 
 ## :memo: Task List
 - [x] Implement model classes with relevant methods (print, getter/setter, equals, hashCode, compareTo)
 - [x] Implement DAO classes for each model (read from CSV, add/update/retrieve/remove, save to CSV)
+- [x] Implement Service class (pseudo-relational database operations)
 - [x] Implement main application (command-line interface)
+- [x] Miscellaneous features
+  - [x] Input validation (allows retries without closing app)
+  - [x] Exception handling with custom error messages
+  - [x] Relational integrity when Author/Publisher is removed
 
 - [ ] Next Steps
-  - [x] Input sanitizing (currently working for: ";")
-  - [x] Input checking (currently working for: duplicate Ids)
-  - [x] Recursive menu (returns to main title after successful operation)
-  - [ ] Exception handling (better error messages)
-  - [ ] Outsource DAO instantiation to a Service class (instead of in main app)
-  - [ ] Relational integrity (Author-Book and Publisher-Book; update each other with every modification)
   - [ ] Unit testing
-  - [ ] More forgiving input handling (retry input)
-  - [ ] More intuitive book retrieve result (author/publisher name instead of id)
+
