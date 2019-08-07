@@ -27,10 +27,8 @@ public class LMSApp {
 		System.out.println("[4] Remove existing...");
 		System.out.println("[5] Exit service\n");
 		
-		int taskChoice;
-		
 		try {
-			taskChoice = Integer.parseInt(scan.nextLine());
+			int taskChoice = Integer.parseInt(scan.nextLine());
 			
 			if (taskChoice == 5) exitApp();
 			if (taskChoice < 1 || taskChoice > 5) throw new NumberFormatException();
@@ -41,22 +39,15 @@ public class LMSApp {
 			System.out.println("[3] Publisher");
 			System.out.println("[4] Exit service\n");
 			
-			int objectChoice;
+			int objectChoice = Integer.parseInt(scan.nextLine());
 			
-			try {
-				objectChoice = Integer.parseInt(scan.nextLine());
-				
-				if (objectChoice == 4) exitApp();
-				if (objectChoice < 1 || objectChoice > 4) throw new NumberFormatException();
-				
-				DaoService.performTask(taskChoice, objectChoice, scan);
-				
-			} catch (NumberFormatException e) {
-				System.out.println("Please type a valid option number (1 ~ 4).\n");
-			}
-					
+			if (objectChoice == 4) exitApp();
+			if (objectChoice < 1 || objectChoice > 4) throw new NumberFormatException();
+			
+			DaoService.performTask(taskChoice, objectChoice, scan);
+			
 		} catch (NumberFormatException e) {
-			System.out.println("Please type a valid option number (1 ~ 5).\n");
+			System.out.println("Please type a valid option number.\n");
 		}
 		
 		System.out.println("=================================================================\n");

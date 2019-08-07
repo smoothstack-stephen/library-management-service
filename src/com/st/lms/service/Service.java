@@ -28,6 +28,9 @@ public class Service {
 
 	public void performTask(int taskType, int objectType, Scanner scan) {
 		String name, id, authId, pubId, address;
+		authDao.readAuthors();
+		bookDao.readBooks();
+		pubDao.readPublishers();
 		System.out.println();
 		
 		switch (objectType) {
@@ -120,7 +123,9 @@ public class Service {
 		}
 		
 		System.out.println();
-		saveChangesToCSV();
+		synchronized (this) {
+			saveChangesToCSV();
+		}
 	}
 	
 	public void betterBookInfo(String id) {

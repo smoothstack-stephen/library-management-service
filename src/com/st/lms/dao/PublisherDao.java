@@ -10,9 +10,7 @@ public class PublisherDao {
 	private Set<Publisher> publishers = new TreeSet<>();
 
 	
-	public PublisherDao() {
-		readPublishers();
-	}
+	public PublisherDao() {}
 	
 	public void readPublishers() {
 		try (BufferedReader buffer = new BufferedReader(new FileReader(fileRelativePath))) {

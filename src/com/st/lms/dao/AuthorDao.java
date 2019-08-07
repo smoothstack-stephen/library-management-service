@@ -9,9 +9,7 @@ public class AuthorDao {
 	private String fileRelativePath = System.getProperty("user.dir") + "\\src\\authors.csv";
 	private Set<Author> authors = new TreeSet<>();
 	
-	public AuthorDao() {
-		readAuthors();
-	}
+	public AuthorDao() {}
 
 	public void readAuthors() {
 		try (BufferedReader buffer = new BufferedReader(new FileReader(fileRelativePath))) {
